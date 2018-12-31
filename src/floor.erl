@@ -1,6 +1,37 @@
 -module(floor).
-
+-import(lists, [append/2, sublist/2, subtract/2]).
 -include("config.hrl").
 
 %% API
--export([]).
+-export([
+  queue/1,
+  dudes/2,
+  test/0
+  ]).
+
+queue(Dudes_queue) ->
+  receive
+    {{dude, Id}, From} ->
+      Queue = append(Dudes_queue, [Id]),
+      From ! Queue,
+      queue(Queue);
+    {open, Free_slots, From} ->
+      Dudes_entering = dudes(Dudes_queue, Free_slots),
+      From ! Dudes_entering,
+      queue(subtract(Dudes_queue, Dudes_entering))
+  end.
+
+dudes(_, 0) ->
+  [];
+dudes(Dudes_queue, Free_slots) ->
+  sublist(Dudes_queue, Free_slots).
+
+test() ->
+  QPID = spawn(floor, queue, [[]]),
+  QPID ! {{dude, 1}, self()},
+  QPID ! {{dude, 2}, self()},
+  QPID ! {open, 2, self()},
+  QPID ! {{dude, 3}, self()},
+  QPID ! {open, 0, self()},
+  QPID ! {open, 2, self()},
+  {ok}.
