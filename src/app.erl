@@ -1,7 +1,6 @@
-%%%-------------------------------------------------------------------
-%%% @author sigurd
 -module(app).
--author("sigurd").
+
+-include("config.hrl").
 
 %% API
 -export([start/0]).
