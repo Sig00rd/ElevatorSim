@@ -5,7 +5,6 @@
 %% API
 -export([
   floor/2,
-  dudes/2,
   test/0
   ]).
 
@@ -16,14 +15,14 @@ floor(Dudes_queue, Floor_number) ->
       From ! Queue,
       floor(Queue, Floor_number);
     {open, Free_slots, From} ->
-      Dudes_entering = dudes(Dudes_queue, Free_slots),
+      Dudes_entering = dudes_entering(Dudes_queue, Free_slots),
       From ! {entering, Dudes_entering},
       floor(subtract(Dudes_queue, Dudes_entering), Floor_number)
   end.
 
-dudes(_, 0) ->
+dudes_entering(_, 0) ->
   [];
-dudes(Dudes_queue, Free_slots) ->
+dudes_entering(Dudes_queue, Free_slots) ->
   sublist(Dudes_queue, Free_slots).
 
 test() ->

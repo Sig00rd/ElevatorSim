@@ -1,23 +1,30 @@
 -module(elevator).
-
+-import(lists, [subtract/2]).
 -include("config.hrl").
 
 %% API
--export([elevator/2, unload_dudes/2]).
+-export([elevator/2]).
 
-elevator(Dudes_list, Current_floor) ->
+elevator(Dudes_inside, Current_floor) ->
   receive
     {entering, Dudes_entering} ->
-      New_dudes_list = append(Dudes_list, Dudes_entering),
+      New_dudes_list = append(Dudes_inside, Dudes_entering),
       elevator(New_dudes_list, Current_floor);
     {move, Direction} ->
       New_floor = move(Current_floor, Direction),
-      elevator(Dudes_list, New_floor)
+      elevator(Dudes_inside, New_floor);
+    {get_floor, From} ->
+      From ! Current_floor;
+    {unload} ->
+      Unloaded_dudes = unloaded_dudes(Dudes_inside, Current_floor),
+      Dudes_staying = subtract(Dudes_inside, Unloaded_dudes),
+      elevator(Dudes_staying, Current_floor)
   end.
 
+% Direction is:
 % -1 to travel downwards, 1 upwards, 0 to stay on the same floor
 move(Current_floor, Direction) ->
   Current_floor + Direction.
 
-unload_dudes(Dudes_list, Current_floor) ->
-  [Dude || Dude <- Dudes_list, Dude = Current_floor].
+unloaded_dudes(Dudes_inside, Current_floor) ->
+  [Dude || Dude <- Dudes_inside, Dude = Current_floor].
