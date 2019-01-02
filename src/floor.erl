@@ -4,15 +4,15 @@
 
 %% API
 -export([
-  floor/2,
+  floor/3,
   test/0
   ]).
 
-floor(Dudes_queue, Floor_number) ->
+floor(Dudes_queue, Floor_number, Control_system) ->
   receive
     {{dude, Id}, From} ->
       Queue = append(Dudes_queue, [Id]),
-      From ! Queue,
+      Control_system ! {button_pressed, Floor_number},
       floor(Queue, Floor_number);
     {open, Free_slots, From} ->
       Dudes_entering = dudes_entering(Dudes_queue, Free_slots),
