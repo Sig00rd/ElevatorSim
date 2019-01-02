@@ -13,11 +13,11 @@ floor(Dudes_queue, Floor_number, Control_system) ->
     {{dude, Id}, From} ->
       Queue = append(Dudes_queue, [Id]),
       Control_system ! {button_pressed, Floor_number},
-      floor(Queue, Floor_number);
+      floor(Queue, Floor_number, Control_system);
     {open, Free_slots, From} ->
       Dudes_entering = dudes_entering(Dudes_queue, Free_slots),
       From ! {entering, Dudes_entering},
-      floor(subtract(Dudes_queue, Dudes_entering), Floor_number)
+      floor(subtract(Dudes_queue, Dudes_entering), Floor_number, Control_system)
   end.
 
 dudes_entering(_, 0) ->
