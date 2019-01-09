@@ -3,12 +3,16 @@
 -include("config.hrl").
 
 %% API
--export([elevator/3]).
+-export([elevator/0]).
+
+elevator() ->
+  receive
+    {set_control_system, Control_system_PID} ->
+      elevator([], 0, Control_system_PID)
+  end.
 
 elevator(Dudes_inside, Current_floor, Control_system) ->
   receive
-    {set_control_system, Control_system} ->
-      elevator(Dudes_inside, Current_floor, Control_system);
     {entering, Dudes_entering} ->
       send_button_pressed_messages(Control_system, Dudes_entering),
       New_dudes_list = append(Dudes_inside, Dudes_entering),

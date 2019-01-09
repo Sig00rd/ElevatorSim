@@ -4,12 +4,19 @@
 
 %% API
 -export([
-  floor/3,
+  floor/1,
   test/0
   ]).
 
-floor(Dudes_queue, Floor_number, Control_system) ->
+floor(Floor_number) ->
   receive
+    {set_control_system, Control_system_PID} -> floor(Floor_number, Control_system_PID, [])
+  end.
+
+floor(Floor_number, Control_system, Dudes_queue) ->
+  receive
+    {set_control_system, Control_system_PID} ->
+      floor(Floor_number, Control_system_PID, Dudes_queue);
     {{dude, Id}, From} ->
       Queue = append(Dudes_queue, [Id]),
       Control_system ! {button_pressed, Floor_number},

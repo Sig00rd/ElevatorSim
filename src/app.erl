@@ -7,4 +7,3 @@
 
 
 start() ->
-  true.
