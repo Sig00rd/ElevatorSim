@@ -38,6 +38,5 @@ send_button_pressed_messages(Control_system, [H|T]) ->
   Control_system ! {button_pressed, H},
   send_button_pressed_messages(Control_system, T).
 
-
 unloaded_dudes(Dudes_inside, Current_floor) ->
   [Dude || Dude <- Dudes_inside, Dude = Current_floor].
