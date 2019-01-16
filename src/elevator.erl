@@ -1,5 +1,5 @@
 -module(elevator).
--import(lists, [subtract/2]).
+-import(lists, [subtract/2, append/2]).
 -include("config.hrl").
 
 %% API
