@@ -18,11 +18,10 @@ elevator(Dudes_inside, Current_floor, Control_system, Drawer) ->
       Drawer ! {elevator, New_dudes_list, Current_floor},
       elevator(New_dudes_list, Current_floor, Control_system, Drawer);
 
-    {move, Direction} ->
-      New_floor = move(Current_floor, Direction),
+    {move, Floor} ->
       % floor ! {open, ?ELEVATOR_CAPACITY - length(Dudes_inside), self()}
-      Drawer ! {elevator, Dudes_inside, New_floor},
-      elevator(Dudes_inside, New_floor, Control_system, Drawer);
+      Drawer ! {elevator, Dudes_inside, Floor},
+      elevator(Dudes_inside, Floor, Control_system, Drawer);
 
     {get_floor, From} ->
       From ! Current_floor,
@@ -36,11 +35,6 @@ elevator(Dudes_inside, Current_floor, Control_system, Drawer) ->
       elevator(Dudes_staying, Current_floor, Control_system, Drawer)
 
   end.
-
-% Direction is:
-% -1 to travel downwards, 1 upwards, 0 to stay on the same floor
-move(Current_floor, Direction) ->
-  Current_floor + Direction.
 
 send_button_pressed_messages(_, []) -> ok;
 send_button_pressed_messages(Control_system, [H|T]) ->
