@@ -33,7 +33,7 @@ setupElevator() ->
   {elevator, [], 0}.
 
 drawer(started, State) ->
-  %drawEmptyLines(),
+  drawEmptyLines(),
   draw(State),
   {Floors, Elevator} = State,
   receive

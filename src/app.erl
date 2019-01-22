@@ -8,7 +8,7 @@
 start() ->
   Drawer = spawn(drawer, drawer, []),
   Floors = spawn_floors(?FLOOR_COUNT, Drawer),
-  Elevator = spawn(elevator, elevator, [Drawer]),
+  Elevator = spawn(elevator, elevator, [Drawer, Floors]),
   Control_system = spawn(control_system, control_system, [Elevator, Floors]),
   utils:broadcast({set_control_system, Control_system}, [Elevator|Floors]),
   Dude_generator = spawn(dude_generator, dude_generator, [Floors]),
