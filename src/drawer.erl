@@ -74,7 +74,7 @@ elevatorToString({elevator, DudesInside, _}) ->
 
 dudesToString(Dudes) ->
   dudesToString("", Dudes).
-dudesToString(Str, [{dude, To} | T]) ->
+dudesToString(Str, [To | T]) ->
   dudesToString(Str ++ integer_to_list(To), T);
 dudesToString(Str, []) ->
   Str.
