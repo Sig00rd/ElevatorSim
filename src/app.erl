@@ -47,6 +47,7 @@ spawn_floors(Floors_list, Number_of_floors, Drawer) ->
 input_redirect(Main, Dude_generator, Drawer) ->
   receive
     draw_now ->
+      % comment next line to see the invalid input
       Drawer ! draw_now,
       input_redirect(Main, Dude_generator, Drawer);
     exit ->
