@@ -9,6 +9,7 @@
 -module(input).
 -author("matematyk60").
 
+-include("config.hrl").
 %% API
 -export([startInput/1, test/0]).
 
@@ -45,7 +46,12 @@ matchString(Str) when length(Str) > 1 ->
     {_, {error, _}} ->
       wrong;
     {{FromConverted, _}, {ToConverted, _}} ->
-      {ok, {newDude, FromConverted, ToConverted}}
+      if
+        FromConverted =< ?FLOOR_COUNT, ToConverted =< ?FLOOR_COUNT ->
+          {ok, {newDude, FromConverted, ToConverted}};
+        true ->
+          wrong
+      end
   end;
 
 matchString(_) ->
