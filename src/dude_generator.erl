@@ -1,7 +1,5 @@
 -module(dude_generator).
--import(rand, [uniform/0]).
 -import(math, [pow/2]).
--import(lists, [nth/2]).
 -include("config.hrl").
 
 %% API
@@ -11,7 +9,7 @@
 dude_generator(Floor_PIDs) ->
   receive
     {dude, From, To} ->
-      nth(From+1, Floor_PIDs) ! dude(To);
+      lists:nth(From+1, Floor_PIDs) ! {dude, To};
 
     {step} ->  handle_all_floors(Floor_PIDs)
   end.
@@ -27,7 +25,7 @@ handle_all_floors(N, Floor_PIDs) ->
 generate_dude(From_PID, Roll_to_spawn)
   when Roll_to_spawn =< ?DUDE_PER_STEP_CHANCE ->
     From_PID ! dude();
-generate_dude(Floor_PID, Roll_to_spawn)
+generate_dude(_, Roll_to_spawn)
   when Roll_to_spawn > ?DUDE_PER_STEP_CHANCE ->
     ok.
 
@@ -35,6 +33,6 @@ chance_to_spawn(Floor_number) ->
   (1/(pow(?FLOOR_COUNT/2, 2)))* pow((?FLOOR_COUNT/2 - Floor_number), 2).
 
 dude() ->
-  Destination_floor = round(random:uniform() * ?FLOOR_COUNT),
+  Destination_floor = round(rand:uniform() * ?FLOOR_COUNT),
   {dude, Destination_floor}.
 

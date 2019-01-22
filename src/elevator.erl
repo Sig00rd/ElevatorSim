@@ -1,31 +1,36 @@
 -module(elevator).
--import(lists, [subtract/2, append/2]).
 -include("config.hrl").
 
 %% API
--export([elevator/0]).
+-export([elevator/1]).
 
-elevator() ->
+elevator(Drawer) ->
   receive
     {set_control_system, Control_system_PID} ->
-      elevator([], 0, Control_system_PID)
+      elevator([], 0, Control_system_PID, Drawer)
   end.
 
-elevator(Dudes_inside, Current_floor, Control_system) ->
+elevator(Dudes_inside, Current_floor, Control_system, Drawer) ->
   receive
     {entering, Dudes_entering} ->
       send_button_pressed_messages(Control_system, Dudes_entering),
-      New_dudes_list = append(Dudes_inside, Dudes_entering),
-      elevator(New_dudes_list, Current_floor, Control_system);
+      New_dudes_list = lists:append(Dudes_inside, Dudes_entering),
+      elevator(New_dudes_list, Current_floor, Control_system, Drawer);
+
     {move, Direction} ->
       New_floor = move(Current_floor, Direction),
-      elevator(Dudes_inside, New_floor, Control_system);
+      elevator(Dudes_inside, New_floor, Control_system, Drawer);
+
     {get_floor, From} ->
       From ! Current_floor;
+
     {unload} ->
       Unloaded_dudes = unloaded_dudes(Dudes_inside, Current_floor),
-      Dudes_staying = subtract(Dudes_inside, Unloaded_dudes),
-      elevator(Dudes_staying, Current_floor, Control_system)
+      Dudes_staying = lists:subtract(Dudes_inside, Unloaded_dudes),
+      elevator(Dudes_staying, Current_floor, Control_system, Drawer);
+
+    {step} -> Drawer ! {elevator, Dudes_inside, Current_floor}
+
   end.
 
 % Direction is:

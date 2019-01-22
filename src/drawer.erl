@@ -10,9 +10,9 @@
 -author("matematyk60").
 
 %% API
--export([drawer/1]).
+-export([drawer/0]).
 
-drawer(Floor_numbers) ->
+drawer() ->
   .
 
 time
