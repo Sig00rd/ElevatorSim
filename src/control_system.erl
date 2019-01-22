@@ -24,10 +24,11 @@ control_system(Elevator, Floors, Queued_floors, Current_direction) ->
 %%               end;
     {step} ->
       Current_floor = Elevator ! {get_floor, self()},
+      io:format(integer_to_list(Current_floor)),
       Direction = handle_direction(Current_direction, Current_floor),
       Elevator ! {move, Direction},
       control_system(Elevator, Floors, Queued_floors, Direction)
-%%      %
+%%
   end.
 
 handle_direction(1, ?FLOOR_COUNT-1) -> -1;
