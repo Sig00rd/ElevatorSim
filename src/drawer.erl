@@ -33,6 +33,7 @@ setupElevator() ->
   {elevator, [], 0}.
 
 drawer(started, State) ->
+  drawEmptyLines(),
   draw(State),
   {Floors, Elevator} = State,
   receive
@@ -78,3 +79,11 @@ dudesToString(Str, [To | T]) ->
   dudesToString(Str ++ integer_to_list(To), T);
 dudesToString(Str, []) ->
   Str.
+
+drawEmptyLines() ->
+  drawEmptyLines(lists:seq(1, 150)).
+drawEmptyLines([]) ->
+  ok;
+drawEmptyLines([_ | T]) ->
+  io:format("\n"),
+  drawEmptyLines(T).
