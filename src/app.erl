@@ -6,9 +6,10 @@
 -export([start/0]).
 
 start() ->
-  Floors = spawn_floors(0),
+  Floors = spawn_floors(?FLOOR_COUNT),
   Elevator = spawn(elevator, elevator, []),
   Control_system = spawn(control_system, control_system, [Elevator, Floors]),
+
   utils:broadcast({set_control_system, Control_system}, [Elevator|Floors]),
   simulation().
 
