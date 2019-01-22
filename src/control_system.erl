@@ -18,18 +18,18 @@ control_system(Elevator, Floors, Queued_floors, Current_direction) ->
       New_queued_floors = sets:del_element(Floor_number, Queued_floors),
       control_system(Elevator, Floors, New_queued_floors, Current_direction);
 
-    {step}  -> case sets:is_empty(Queued_floors) of
-                 true -> control_system(Elevator, Floors, Queued_floors, Current_direction);
-                 false -> self() ! {move}
-               end;
-
-    {move} ->
+%%    {step}  -> case sets:is_empty(Queued_floors) of
+%%                 true -> control_system(Elevator, Floors, Queued_floors, Current_direction);
+%%                 false -> self() ! {move}
+%%               end;
+    {step} ->
       Current_floor = Elevator ! {get_floor, self()},
       Direction = handle_direction(Current_direction, Current_floor),
       Elevator ! {move, Direction},
       control_system(Elevator, Floors, Queued_floors, Direction)
-      %
+%%      %
   end.
 
 handle_direction(1, ?FLOOR_COUNT-1) -> -1;
-handle_direction(-1, 0) -> 1.
+handle_direction(-1, 0) -> 1;
+handle_direction(Direction, _) -> Direction.
