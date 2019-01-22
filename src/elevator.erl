@@ -15,10 +15,12 @@ elevator(Dudes_inside, Current_floor, Control_system, Drawer) ->
     {entering, Dudes_entering} ->
       send_button_pressed_messages(Control_system, Dudes_entering),
       New_dudes_list = lists:append(Dudes_inside, Dudes_entering),
+      Drawer ! {elevator, New_dudes_list, Current_floor},
       elevator(New_dudes_list, Current_floor, Control_system, Drawer);
 
     {move, Direction} ->
       New_floor = move(Current_floor, Direction),
+      Drawer ! {elevator, Dudes_inside, New_floor},
       elevator(Dudes_inside, New_floor, Control_system, Drawer);
 
     {get_floor, From} ->
@@ -27,11 +29,8 @@ elevator(Dudes_inside, Current_floor, Control_system, Drawer) ->
     {unload} ->
       Unloaded_dudes = unloaded_dudes(Dudes_inside, Current_floor),
       Dudes_staying = lists:subtract(Dudes_inside, Unloaded_dudes),
-      elevator(Dudes_staying, Current_floor, Control_system, Drawer);
-
-    {step} -> Drawer ! {elevator, Dudes_inside, Current_floor},
-      elevator(Dudes_inside, Current_floor, Control_system, Drawer)
-
+      Drawer ! {elevator, Dudes_staying, Current_floor},
+      elevator(Dudes_staying, Current_floor, Control_system, Drawer)
   end.
 
 % Direction is:
