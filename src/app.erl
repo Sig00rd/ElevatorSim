@@ -30,7 +30,7 @@ simulation(PIDs) ->
 spawn_floors(Number_of_floors, Drawer) ->
   spawn_floors([], Number_of_floors, Drawer).
 
-spawn_floors(Floors_list, 0, _) ->
+spawn_floors(Floors_list, -1, _) ->
   Floors_list;
 spawn_floors(Floors_list, Number_of_floors, Drawer) ->
   New_floor = spawn(floor, floor, [Number_of_floors, Drawer]),

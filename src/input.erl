@@ -40,7 +40,7 @@ matchString(Str) when length(Str) > 1 ->
       wrong;
     {{FromConverted, _}, {ToConverted, _}} ->
       if
-        FromConverted =< ?FLOOR_COUNT, ToConverted =< ?FLOOR_COUNT ->
+        FromConverted < ?FLOOR_COUNT, ToConverted < ?FLOOR_COUNT ->
           {ok, {newDude, FromConverted, ToConverted}};
         true ->
           wrong

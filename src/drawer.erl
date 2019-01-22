@@ -22,7 +22,7 @@ drawer() ->
 
 
 setupFloors(FloorNumbers) ->
-  setupFloors([], FloorNumbers).
+  setupFloors([], FloorNumbers - 1).
 
 setupFloors(Floors, -1) ->
   Floors;
