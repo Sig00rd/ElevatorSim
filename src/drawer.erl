@@ -10,4 +10,27 @@
 -author("matematyk60").
 
 %% API
--export([]).
+-export([drawer/1]).
+
+drawer(Floor_numbers) ->
+  .
+
+time
+
+emptyElevatorSpace() ->
+
+  "          ".
+
+elevatorToString({elevator_state, DudesInside, _}) ->
+  Prefix = "E[ ",
+  timer
+  Contents = string:left(dudesToString(DudesInside) ++ "           ", 5),
+  Postfix = " ]",
+  Prefix ++ Contents ++ Postfix.
+
+dudesToString(Dudes) ->
+  dudesToString("", Dudes).
+dudesToString(Str, [{dude, Char, _, _} | T]) ->
+  dudesToString(Str ++ Char, T);
+dudesToString(Str, []) ->
+  Str.
