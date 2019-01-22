@@ -21,7 +21,6 @@ control_system(Elevator, Floors, Queued_floors, Current_direction, Current_floor
 %%    {step}  -> case sets:is_empty(Queued_floors) of
 %%                 true -> control_system(Elevator, Floors, Queued_floors, Current_direction);
 %%                 false -> self() ! {move}
-
 %%               end;
     {step} ->
       Direction = handle_direction(Current_direction, Current_floor),
