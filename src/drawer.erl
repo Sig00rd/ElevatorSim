@@ -34,7 +34,9 @@ setupElevator() ->
 
 drawer(started, State) ->
   drawEmptyLines(),
+  drawTitle(),
   draw(State),
+  drawCommands(),
   {Floors, Elevator} = State,
   receive
     %%% update floor with this number state
@@ -89,3 +91,9 @@ drawEmptyLines([]) ->
 drawEmptyLines([_ | T]) ->
   io:format("\n"),
   drawEmptyLines(T).
+
+drawTitle() ->
+  io:format("||| SYMULACJA WINDY BY D.G. AND S.F.\n").
+
+drawCommands() ->
+  io:format("TYPE: |exit| - to end simulation |<from><to>q| to add new dude :)))))))\n").
