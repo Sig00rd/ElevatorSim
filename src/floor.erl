@@ -24,7 +24,9 @@ floor(Floor_number, Control_system, Dudes_queue, Drawer) ->
     {open, Free_slots, From} ->
       Dudes_entering = dudes_entering(Dudes_queue, Free_slots),
       From ! {entering, Dudes_entering},
-      floor(Floor_number, Control_system, subtract(Dudes_queue, Dudes_entering), Drawer)
+      New_queue = subtract(Dudes_queue, Dudes_entering),
+      Drawer ! {floor, Floor_number, New_queue},
+      floor(Floor_number, Control_system, New_queue, Drawer)
       % rozważyć sprawdzenie czy dalej nie ma oczekujących ludków na tym piętrze
   end.
 
