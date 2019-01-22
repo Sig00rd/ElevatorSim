@@ -19,7 +19,7 @@ floor(Floor_number, Control_system, Dudes_queue, Drawer) ->
     {dude, Destination_floor} ->
       Queue = append(Dudes_queue, [Destination_floor]),
       Control_system ! {button_pressed, Floor_number},
-      Drawer ! {floor, Floor_number, Dudes_queue},
+      Drawer ! {floor, Floor_number, Queue},
       floor(Queue, Floor_number, Control_system, Drawer);
     {open, Free_slots, From} ->
       Dudes_entering = dudes_entering(Dudes_queue, Free_slots),
