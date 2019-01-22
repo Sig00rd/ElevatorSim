@@ -12,7 +12,6 @@ control_system(Elevator, Floors, Queued_floors, Current_direction) ->
   receive
     {button_pressed, Floor_number} ->
       New_queued_floors = sets:add_element(Floor_number, Queued_floors),
-      io:format("dodano piętro"),
       control_system(Elevator, Floors, New_queued_floors, Current_direction);
 
     {button_unpressed, Floor_number} ->
@@ -21,7 +20,7 @@ control_system(Elevator, Floors, Queued_floors, Current_direction) ->
 
     {step}  -> case sets:is_empty(Queued_floors) of
                  true -> control_system(Elevator, Floors, Queued_floors, Current_direction);
-                 false -> self ! {move}
+                 false -> self() ! {move}
                end;
 
     {move} ->

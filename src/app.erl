@@ -15,18 +15,25 @@ start() ->
   Input_redirect = spawn(app, input_redirect, [self(), Dude_generator]),
   Input = spawn(input, startInput, [Input_redirect]),
   PIDs_that_accept_step = [Dude_generator, Control_system],
-  _ = spawn(app, simulation, [PIDs_that_accept_step]),
+  Simulation = spawn(app, simulation, [PIDs_that_accept_step]),
   receive
     exit ->
       io:format("Gonna die :( \n"),
-      exit("Ded :^(")
+      Simulation ! exit,
+      ok
   end.
 
 
 simulation(PIDs) ->
-  utils:broadcast({step}, PIDs),
-  timer:sleep(?STEP_INTERVAL),
-  simulation(PIDs).
+  self() ! simulate,
+  receive
+    simulate ->
+      utils:broadcast({step}, PIDs),
+      timer:sleep(?STEP_INTERVAL),
+      simulation(PIDs);
+    exit ->
+      io:format("Simulation ended \n")
+  end.
 
 spawn_floors(Number_of_floors, Drawer) ->
   spawn_floors([], Number_of_floors, Drawer).
