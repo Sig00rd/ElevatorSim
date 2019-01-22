@@ -13,6 +13,7 @@ dude_generator(Floor_PIDs) ->
       dude_generator(Floor_PIDs);
 
     {step} -> handle_all_floors(Floor_PIDs),
+      io:format("Handluje z pietrami"),
       dude_generator(Floor_PIDs)
   end.
 
