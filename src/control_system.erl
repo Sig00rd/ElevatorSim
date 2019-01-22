@@ -12,9 +12,7 @@ control_system(Elevator, Floors, Queued_floors, Current_direction) ->
   receive
     {button_pressed, Floor_number} ->
       New_queued_floors = sets:add_element(Queued_floors, Floor_number),
-      control_system(Elevator, Floors, New_queued_floors, Current_direction)
+      control_system(Elevator, Floors, New_queued_floors, Current_direction);
+
+    {step} -> ok% ugabuga rusz winde
   end.
-
-
-%get current floor
-%
