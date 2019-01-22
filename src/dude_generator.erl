@@ -21,7 +21,8 @@ handle_all_floors(Floor_PIDs) ->
 
 handle_all_floors(0, _) -> ok;
 handle_all_floors(N, Floor_PIDs) ->
-  generate_dude(lists:nth(N, Floor_PIDs), chance_to_spawn(N - 1)).
+  generate_dude(lists:nth(N, Floor_PIDs), chance_to_spawn(N-1)),
+  handle_all_floors(N-1, Floor_PIDs).
 
 
 generate_dude(From_PID, Roll_to_spawn)
