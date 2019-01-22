@@ -29,7 +29,8 @@ elevator(Dudes_inside, Current_floor, Control_system, Drawer) ->
       Dudes_staying = lists:subtract(Dudes_inside, Unloaded_dudes),
       elevator(Dudes_staying, Current_floor, Control_system, Drawer);
 
-    {step} -> Drawer ! {elevator, Dudes_inside, Current_floor}
+    {step} -> Drawer ! {elevator, Dudes_inside, Current_floor},
+      elevator(Dudes_inside, Current_floor, Control_system, Drawer)
 
   end.
 

@@ -7,8 +7,8 @@
   ]).
 
 
-broadcast(_, []) ->
-  true;
+broadcast(_, []) -> ok;
+
 broadcast(Message, [H|T]) ->
   H ! Message,
   broadcast(Message, T).

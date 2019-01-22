@@ -11,7 +11,8 @@ dude_generator(Floor_PIDs) ->
     {dude, From, To} ->
       lists:nth(From+1, Floor_PIDs) ! {dude, To};
 
-    {step} ->  handle_all_floors(Floor_PIDs)
+    {step} ->  handle_all_floors(Floor_PIDs),
+      dude_generator(Floor_PIDs)
   end.
 
 handle_all_floors(Floor_PIDs) ->

@@ -14,5 +14,7 @@ control_system(Elevator, Floors, Queued_floors, Current_direction) ->
       New_queued_floors = sets:add_element(Queued_floors, Floor_number),
       control_system(Elevator, Floors, New_queued_floors, Current_direction);
 
-    {step} -> ok% ugabuga rusz winde
+    {step} -> ok,
+      control_system(Elevator, Floors, Queued_floors, Current_direction)
+  % ugabuga rusz winde
   end.

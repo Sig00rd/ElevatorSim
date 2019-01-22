@@ -13,7 +13,7 @@ start() ->
   utils:broadcast({set_control_system, Control_system}, [Elevator|Floors]),
   Dude_generator = spawn(dude_generator, dude_generator, [Floors]),
   Input = spawn(input, startInput, [self()]),
-  PIDs_that_accept_step = lists:append(Floors, [Elevator, Dude_generator, Control_system]),
+  PIDs_that_accept_step = [Elevator, Dude_generator, Control_system],
   simulation(PIDs_that_accept_step).
 
 
