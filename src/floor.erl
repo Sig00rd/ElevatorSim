@@ -4,26 +4,27 @@
 
 %% API
 -export([
-  floor/1
+  floor/2
   ]).
 
-floor(Floor_number) ->
+floor(Floor_number, Drawer) ->
   receive
-    {set_control_system, Control_system_PID} -> floor(Floor_number, Control_system_PID, [])
+    {set_control_system, Control_system_PID} -> floor(Floor_number, Control_system_PID, [], Drawer)
   end.
 
-floor(Floor_number, Control_system, Dudes_queue) ->
+floor(Floor_number, Control_system, Dudes_queue, Drawer) ->
   receive
     {set_control_system, Control_system_PID} ->
-      floor(Floor_number, Control_system_PID, Dudes_queue);
+      floor(Floor_number, Control_system_PID, Dudes_queue, Drawer);
     {dude, Destination_floor} ->
       Queue = append(Dudes_queue, [Destination_floor]),
       Control_system ! {button_pressed, Floor_number},
-      floor(Queue, Floor_number, Control_system);
+      Drawer ! {floor, Floor_number, Dudes_queue},
+      floor(Queue, Floor_number, Control_system, Drawer);
     {open, Free_slots, From} ->
       Dudes_entering = dudes_entering(Dudes_queue, Free_slots),
       From ! {entering, Dudes_entering},
-      floor(subtract(Dudes_queue, Dudes_entering), Floor_number, Control_system)
+      floor(subtract(Dudes_queue, Dudes_entering), Floor_number, Control_system, Drawer)
   end.
 
 dudes_entering(_, 0) ->
