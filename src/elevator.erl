@@ -20,6 +20,11 @@ elevator(Dudes_inside, Current_floor, Control_system, Drawer) ->
 
     {move, Direction} ->
       New_floor = move(Current_floor, Direction),
+      % dodać to niżeje, Direction} ->
+      New_floor = move(Current_floor, Direction),
+      % dodać to niżej
+      % floo
+      % floor ! {open, ?ELEV_CAPACITY - Dudes_inside.length, self()
       Drawer ! {elevator, Dudes_inside, New_floor},
       elevator(Dudes_inside, New_floor, Control_system, Drawer);
 
@@ -29,8 +34,10 @@ elevator(Dudes_inside, Current_floor, Control_system, Drawer) ->
     {unload} ->
       Unloaded_dudes = unloaded_dudes(Dudes_inside, Current_floor),
       Dudes_staying = lists:subtract(Dudes_inside, Unloaded_dudes),
+      Control_system ! {button_unpressed, Current_floor},
       Drawer ! {elevator, Dudes_staying, Current_floor},
       elevator(Dudes_staying, Current_floor, Control_system, Drawer)
+
   end.
 
 % Direction is:

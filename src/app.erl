@@ -18,7 +18,8 @@ start() ->
   _ = spawn(app, simulation, [PIDs_that_accept_step]),
   receive
     exit ->
-      io:format("Gonna die :( \n")
+      io:format("Gonna die :( \n"),
+      exit("Ded :^(")
   end.
 
 
