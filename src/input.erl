@@ -24,6 +24,7 @@ startInput(Parent) ->
       startInput(Parent);
     wrong ->
       io:format("Invalid input!!!\n"),
+      Parent ! draw_now,
       startInput(Parent)
   end.
 

@@ -46,7 +46,9 @@ drawer(started, State) ->
 
     %%% update elevator state
     {elevator, ElevatorDudes, ElevatorFloor} ->
-      drawer(started, {Floors, {elevator, ElevatorDudes, ElevatorFloor}})
+      drawer(started, {Floors, {elevator, ElevatorDudes, ElevatorFloor}});
+    draw_now ->
+      drawer(started, State)
   end.
 
 draw({[], _}) ->
