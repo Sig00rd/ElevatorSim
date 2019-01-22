@@ -35,6 +35,6 @@ chance_to_spawn(Floor_number) ->
   (1/(pow(?FLOOR_COUNT/2, 2)))* pow((Floor_number - ?FLOOR_COUNT/2), 2).
 
 dude() ->
-  Destination_floor = round(rand:uniform() * ?FLOOR_COUNT),
+  Destination_floor = round(rand:uniform() * (?FLOOR_COUNT-1)),
   {dude, Destination_floor}.
 
