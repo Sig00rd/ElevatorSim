@@ -31,7 +31,8 @@ generate_dude(_, Roll_to_spawn)
     ok.
 
 chance_to_spawn(Floor_number) ->
-  (1/(pow(?FLOOR_COUNT/2, 2)))* pow((?FLOOR_COUNT/2 - Floor_number), 2).
+
+  (1/(pow(?FLOOR_COUNT/2, 2)))* pow((Floor_number - ?FLOOR_COUNT/2), 2).
 
 dude() ->
   Destination_floor = round(rand:uniform() * ?FLOOR_COUNT),
