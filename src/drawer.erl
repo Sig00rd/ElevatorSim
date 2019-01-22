@@ -9,28 +9,72 @@
 -module(drawer).
 -author("matematyk60").
 
+-include("config.hrl").
+
 %% API
--export([drawer/1]).
+-export([drawer/0]).
 
-drawer(Floor_numbers) ->
-  .
+drawer() ->
+  Floor_numbers = ?FLOOR_COUNT,
+  Floors = lists:reverse(setupFloors(Floor_numbers)),
+  Elevator = setupElevator(),
+  drawer(started, {Floors, Elevator}).
 
-time
+
+setupFloors(FloorNumbers) ->
+  setupFloors([], FloorNumbers).
+
+setupFloors(Floors, -1) ->
+  Floors;
+setupFloors(Floors, FloorNumber) ->
+  setupFloors([{floor, FloorNumber, []} | Floors], FloorNumber - 1).
+
+setupElevator() ->
+  {elevator, [], 0}.
+
+drawer(started, State) ->
+  draw(State),
+  {Floors, Elevator} = State,
+  receive
+    %%% update floor with this number state
+    {floor, FloorNumber, FloorDudes} ->
+      Before = lists:takewhile(fun({floor, Number, _}) -> Number =/= FloorNumber end, Floors),
+      Middle = [{floor, FloorNumber, FloorDudes} | []],
+      After = lists:nthtail(1, lists:dropwhile(fun({floor, Number, _}) -> Number =/= FloorNumber end, Floors)),
+      drawer(started, {Before ++ Middle ++ After, Elevator});
+
+    %%% update elevator state
+    {elevator, ElevatorDudes, ElevatorFloor} ->
+      drawer(started, {Floors, {elevator, ElevatorDudes, ElevatorFloor}})
+  end.
+
+draw({[], _}) ->
+  ok;
+draw({[{floor, FloorNumber, FloorDudes} | T], Elevator}) ->
+  {elevator, _, ElevatorFloor} = Elevator,
+  io:format(integer_to_list(FloorNumber) ++ "|"),
+  if
+    ElevatorFloor == FloorNumber ->
+      io:format(elevatorToString(Elevator));
+    true ->
+      io:format(emptyElevatorSpace())
+  end,
+  io:format("| " ++ dudesToString(FloorDudes) ++ "\n"),
+  draw({T, Elevator}).
+
 
 emptyElevatorSpace() ->
+  "             ".
 
-  "          ".
-
-elevatorToString({elevator_state, DudesInside, _}) ->
+elevatorToString({elevator, DudesInside, _}) ->
   Prefix = "E[ ",
-  timer
-  Contents = string:left(dudesToString(DudesInside) ++ "           ", 5),
+  Contents = string:left(dudesToString(DudesInside) ++ "              ", 8),
   Postfix = " ]",
   Prefix ++ Contents ++ Postfix.
 
 dudesToString(Dudes) ->
   dudesToString("", Dudes).
-dudesToString(Str, [{dude, Char, _, _} | T]) ->
-  dudesToString(Str ++ Char, T);
+dudesToString(Str, [{dude, To} | T]) ->
+  dudesToString(Str ++ integer_to_list(To), T);
 dudesToString(Str, []) ->
   Str.
