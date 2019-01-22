@@ -21,16 +21,9 @@ startInput(Parent) ->
   case matchString(Input) of
     {ok, Command} ->
       Parent ! Command,
-      startInput(Parent, waitingForResponse);
+      startInput(Parent);
     wrong ->
       io:format("Invalid input!!!\n"),
-      startInput(Parent)
-  end.
-
-startInput(Parent, waitingForResponse) ->
-  receive
-    ok -> startInput(Parent);
-    wrong -> io:format("Invalid input!!!\n"),
       startInput(Parent)
   end.
 
