@@ -8,7 +8,7 @@
 
 dude_generator(Floor_PIDs) ->
   receive
-    {dude, From, To} ->
+    {newDude, From, To} ->
       lists:nth(From + 1, Floor_PIDs) ! {dude, To},
       dude_generator(Floor_PIDs);
 
